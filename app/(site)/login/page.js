@@ -23,22 +23,22 @@ export default function Login () {
         });
       };
     
-     const csrf = async () => {
-        try {
-            await axios.get('/sanctum/csrf-cookie');
-        } catch (error) {
-            console.error('CSRF request failed:', error.message);
-            console.error('Error Details:', error);
-            throw error; // Re-throw the error for the calling function to handle
-        }
-    };
+    //  const csrf = async () => {
+    //     try {
+    //         await axios.get('/sanctum/csrf-cookie');
+    //     } catch (error) {
+    //         console.error('CSRF request failed:', error.message);
+    //         console.error('Error Details:', error);
+    //         throw error; // Re-throw the error for the calling function to handle
+    //     }
+    // };
     
       const submitLogin = async () => {
         try {
-          await csrf();
-    
           const response = await axios.post('/api/login', loginForm);
-    
+          const api_token = req.api_token;
+          console.log(api_token);
+          
           localStorage.setItem('uid', response.data.uid);
           redirect(response.data.uid);
     
