@@ -34,10 +34,13 @@ export default function Login () {
     // };
     
       const submitLogin = async () => {
+        const response = await axios.post('/api/login', loginForm);
+        console.log(response.data);
+        
         try {
           const response = await axios.post('/api/login', loginForm);
           const api_token = req.api_token;
-          console.log(api_token);
+          console.log(response.data);
           
           localStorage.setItem('uid', response.data.uid);
           redirect(response.data.uid);
