@@ -23,15 +23,15 @@ export default function Login () {
         });
       };
     
-      const csrf = async () => {
+     const csrf = async () => {
         try {
-          await axios.get('/sanctum/csrf-cookie');
+            await axios.get('/sanctum/csrf-cookie');
         } catch (error) {
-          console.error('CSRF request failed:', error.message);
-          console.error('Error Details:', error);
-          throw error; // Re-throw the error for the calling function to handle
+            console.error('CSRF request failed:', error.message);
+            console.error('Error Details:', error);
+            throw error; // Re-throw the error for the calling function to handle
         }
-      };
+    };
     
       const submitLogin = async () => {
         try {
