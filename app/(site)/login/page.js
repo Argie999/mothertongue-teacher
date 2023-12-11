@@ -9,57 +9,49 @@ import Swal from "sweetalert2"
 export default function Login () {
 
     const [loginForm, setLoginForm] = useState({
-        email: '',
-        password: '',
+      email: '',
+      password: '',
+    });
+    const { redirect } = login();
+    const router = useRouter();
+  
+    const handleLoginChange = (e) => {
+      const { name, value } = e.target;
+      setLoginForm({
+        ...loginForm,
+        [name]: value,
       });
-      const { redirect } = login();
-      const router = useRouter();
-    
-      const handleLoginChange = (e) => {
-        const { name, value } = e.target;
-        setLoginForm({
-          ...loginForm,
-          [name]: value,
-        });
-      };
-    
-     const csrf = async () => {
-        try {
-            await axios.get('/sanctum/csrf-cookie');
-        } catch (error) {
-            console.error('CSRF request failed:', error.message);
-            console.error('Error Details:', error);
-            throw error; // Re-throw the error for the calling function to handle
-        }
     };
-    
-      const submitLogin = async () => {
-        try {
-          await csrf();
-    
-          const response = await axios.post('/api/login', loginForm);
-    
-          localStorage.setItem('uid', response.data.uid);
-          redirect(response.data.uid);
-    
-          setTimeout(() => {
-            router.push('/');
-          }, 2000);
-        } catch (error) {
-          console.error('Login failed:', error);
-    
-          if (error.response) {
-            // The request was made, but the server responded with an error
-            Swal.fire(error.response.data.message);
-          } else if (error.request) {
-            // The request was made, but no response was received
-            Swal.fire('No response received from the server.');
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            Swal.fire('An unexpected error occurred.');
-          }
+  
+    const csrf = () => axios.get('/sanctum/csrf-cookie')
+  
+    const submitLogin = async () => {
+      try {
+        await csrf();
+  
+        const response = await axios.post('/api/login', loginForm);
+  
+        localStorage.setItem('uid', response.data.uid);
+        redirect(response.data.uid);
+  
+        setTimeout(() => {
+          router.push('/');
+        }, 2000);
+      } catch (error) {
+        console.error('Login failed:', error);
+  
+        if (error.response) {
+          // The request was made, but the server responded with an error
+          Swal.fire(error.response.data.message);
+        } else if (error.request) {
+          // The request was made, but no response was received
+          Swal.fire('No response received from the server.');
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          Swal.fire('An unexpected error occurred.');
         }
-      };
+      }
+    };
 
     return (
         <div className="absolute w-full h-full flex justify-center items-center">
