@@ -26,7 +26,6 @@ export default function Login () {
     // const csrf = () => axios.get('/sanctum/csrf-cookie')
   
     const submitLogin = async () => {
-      try {
         // await csrf();
   
         axios.get('/api/user')
@@ -48,7 +47,6 @@ export default function Login () {
           }
           console.log(error.config);
         });
-      }
     };
 
     return (
