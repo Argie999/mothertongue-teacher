@@ -28,7 +28,7 @@ export default function Login () {
     const submitLogin = async () => {
         // await csrf();
   
-        axios.get('/api/user')
+        axios.post('/api/login', loginForm)
         .catch(function (error) {
           if (error.response) {
             // The request was made and the server responded with a status code
