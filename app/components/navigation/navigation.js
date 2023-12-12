@@ -25,7 +25,7 @@ export default function Navigation () {
     }
 
     return (
-        <div className="fixed top-0 w-full bg-gray-900/10 z-50 p-6 flex justify-between text-white">
+        <div className="fixed top-0 w-full bg-gray-900/40 z-50 p-6 flex justify-between text-white">
             <ul className="flex gap-10">
                 <li>
                     <Link
@@ -57,7 +57,7 @@ export default function Navigation () {
                     onClick={logoutUser}
                     className="text-xs hover:font-bold"
                 >
-                    logout
+                    Logout
                 </button>
             </div>
         </div>
