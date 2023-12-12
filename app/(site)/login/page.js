@@ -23,35 +23,25 @@ export default function Login () {
       });
     };
   
-    const csrf = () => axios.get('/sanctum/csrf-cookie')
-  
     const submitLogin = async () => {
       try {
-        await csrf();
-  
-        const response = await axios.post('/api/login', loginForm);
-  
-        localStorage.setItem('uid', response.data.uid);
-        redirect(response.data.uid);
-  
-        setTimeout(() => {
-          router.push('/');
-        }, 2000);
+          await axios.post('/api/login', loginForm)
+          .then(res=>{
+              localStorage.setItem('uid', res.data.uid)
+              redirect(res.data.uid)
+              setTimeout(()=>{
+                  router.push('/')
+              },2000)
+          })
+          .catch(err=>{
+              console.log(err)
+              Swal.fire(err.response.data.message)
+          })
       } catch (error) {
-        console.error('Login failed:', error);
-  
-        if (error.response) {
-          // The request was made, but the server responded with an error
-          Swal.fire(error.response.data.message);
-        } else if (error.request) {
-          // The request was made, but no response was received
-          Swal.fire('No response received from the server.');
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          Swal.fire('An unexpected error occurred.');
-        }
+          console.error(error);
+          Swal.fire(error.message);
       }
-    };
+  }
 
     return (
         <div className="absolute w-full h-full flex justify-center items-center">
