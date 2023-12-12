@@ -9,10 +9,17 @@ export default function Navigation () {
     const currentPath = usePathname()
     const router = useRouter()
 
+    const deleteCookie = (name) => {
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;`;
+    };
+
+
     const logoutUser = async () => {
         try {
             await axios.get('/api/logout')
             .then(res=>{
+                deleteCookie('token');
+                
                 localStorage.removeItem('uid')
                 router.push('/login')
             })
