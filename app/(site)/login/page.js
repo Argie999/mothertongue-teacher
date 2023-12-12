@@ -23,25 +23,28 @@ export default function Login () {
       });
     };
   
+    const csrf = () => axios.get('/sanctum/csrf-cookie')
+
     const submitLogin = async () => {
-      try {
-          await axios.post('/api/login', loginForm)
-          .then(res=>{
-              localStorage.setItem('uid', res.data.uid)
-              redirect(res.data.uid)
-              setTimeout(()=>{
-                  router.push('/')
-              },2000)
-          })
-          .catch(err=>{
-              console.log(err)
-              Swal.fire(err.response.data.message)
-          })
-      } catch (error) {
-          console.error(error);
-          Swal.fire(error.message);
-      }
-  }
+        try {
+            await csrf()
+            await axios.post('/api/login', loginForm)
+            .then(res=>{
+                localStorage.setItem('uid', res.data.uid)
+                redirect(res.data.uid)
+                setTimeout(()=>{
+                    router.push('/')
+                },2000)
+            })
+            .catch(err=>{
+                console.log(err)
+                Swal.fire(err.response.data.message)
+            })
+        } catch (error) {
+            console.error(error);
+            Swal.fire(error.message);
+        }
+    }
 
     return (
         <div className="absolute w-full h-full flex justify-center items-center">
