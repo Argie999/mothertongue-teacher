@@ -23,30 +23,34 @@ export default function Login () {
       });
     };
   
-    // const csrf = () => axios.get('/sanctum/csrf-cookie')
+    const csrf = () => axios.get('/sanctum/csrf-cookie')
   
     const submitLogin = async () => {
-        // await csrf();
+      try {
+        await csrf();
   
-        axios.post('/api/login', loginForm)
-        .catch(function (error) {
-          if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          } else if (error.request) {
-            // The request was made but no response was received
-            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-            // http.ClientRequest in node.js
-            console.log(error.request);
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log('Error', error.message);
-          }
-          console.log(error.config);
-        });
+        const response = await axios.post('/api/login', loginForm);
+  
+        localStorage.setItem('uid', response.data.uid);
+        redirect(response.data.uid);
+  
+        setTimeout(() => {
+          router.push('/');
+        }, 2000);
+      } catch (error) {
+        console.error('Login failed:', error);
+  
+        if (error.response) {
+          // The request was made, but the server responded with an error
+          Swal.fire(error.response.data.message);
+        } else if (error.request) {
+          // The request was made, but no response was received
+          Swal.fire('No response received from the server.');
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          Swal.fire('An unexpected error occurred.');
+        }
+      }
     };
 
     return (
